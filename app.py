@@ -24,7 +24,7 @@ from urllib.parse import quote_plus, urlencode
 
 from authlib.integrations.flask_client import OAuth
 from dotenv import find_dotenv, load_dotenv
-import pyrebase
+# import pyrebase
 from flask_migrate import Migrate
 import uuid
 import google.generativeai as genai
