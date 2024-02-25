@@ -335,7 +335,7 @@ nav ul li a svg {
 .generate-form {
     width: 100%;
     display: flex;
-    justify-content: space-evenly;
+    justify-content: center;
     align-items: center;
 }
 
@@ -364,6 +364,11 @@ nav ul li a svg {
     width: 80%;
     /* border: 1px solid #000; */
     margin: 5vh 0;
+    height: 85vh;
+    overflow-y: scroll;
+}
+.result::-webkit-scrollbar {
+    display: none;
 }
 
 .result h1 {
@@ -964,6 +969,17 @@ nav ul li a svg {
 }
 .tab-container::-webkit-scrollbar {
     display: none;
+}
+
+.generate-main {
+    height: 85vh;
+    overflow-y: scroll;
+    margin: 10vh 0;
+
+}
+.generate-main::-webkit-scrollbar {
+    display: none;
+
 }
 
 @media screen and (max-width: 600px) {

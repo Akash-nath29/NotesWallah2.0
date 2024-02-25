@@ -65,7 +65,6 @@ migrate = Migrate(app,db,render_as_batch=True)
 
 class User(db.Model):
     __tablename__ = 'user'
-    __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(30), nullable=False, unique=True)
     email = db.Column(db.Text, nullable=False)
@@ -77,7 +76,6 @@ class User(db.Model):
     
 class Post(db.Model):
     __tablename__ = 'post'
-    __tablename__ = 'post'
     id = db.Column(db.Integer, primary_key=True)
     file_name = db.Column(db.String(100), nullable=False)
     file_description = db.Column(db.Text, nullable=True)
@@ -87,7 +85,6 @@ class Post(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id',name='fk_post_user'), nullable=False)
 
 class Music(db.Model):
-    __tablename__ = 'music'
     __tablename__ = 'music'
     id = db.Column(db.Integer, primary_key=True)
     music_link = db.Column(db.String(100), nullable=False)
@@ -480,8 +477,6 @@ def create_post():
             flash('Please upload a file.', 'danger')
     current_user = User.query.filter_by(id=session['user_id']).first()
     return render_template('create_post.html', curr_user=current_user)
-    current_user = User.query.filter_by(id=session['user_id']).first()
-    return render_template('create_post.html', curr_user=current_user)
 
 @app.route('/view_post/<int:post_id>')
 def view_post(post_id):
@@ -538,7 +533,6 @@ def profile():
         return redirect(url_for('profile'))
 
     return render_template('profile.html', curr_user=user)
-    return render_template('profile.html', curr_user=user)
 
 @app.route('/author/<int:user_id>')
 def author_profile(user_id):
@@ -583,8 +577,6 @@ def share_music():
 
         else:
             flash('Please upload a Music.', 'danger')
-    current_user = User.query.filter_by(id=session['user_id']).first()
-    return render_template('study_music.html', curr_user=current_user)
     current_user = User.query.filter_by(id=session['user_id']).first()
     return render_template('study_music.html', curr_user=current_user)
 
