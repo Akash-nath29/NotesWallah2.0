@@ -29,6 +29,9 @@ from flask_migrate import Migrate
 import uuid
 import google.generativeai as genai
 import markdown2
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
 
 # ENV_FILE = find_dotenv()
@@ -44,7 +47,11 @@ app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///database.db"
 app.secret_key = secrets.token_hex(64)
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
 
-oauth = OAuth(app)
+sender_email = "akashnath@noteswallah.online"
+sender_password = "xsmtpsib-1a634cc4b4076fe5ac43611c599c70002755120f67953a45bce9a35c5bc2e440-AqW3L8KzdgJEIC1y"
+recipient_email = "devakash2905@gmail.com"
+
+# oauth = OAuth(app)
 
 # oauth.register(
 #     "auth0",
@@ -220,6 +227,21 @@ def login():
 
         user = User.query.filter_by(email=email).first()
         if user and check_password_hash(user.password, password):
+            subject = "Login in NotesWallah"
+            body = f"{user.username} Logged In NotesWallah. His/Her email is {email}."
+            message = MIMEMultipart()
+            message["From"] = sender_email
+            message["To"] = recipient_email
+            message["Subject"] = subject
+            message.attach(MIMEText(body, "plain"))
+
+            smtp_server = "smtp-relay.brevo.com"
+            smtp_port = 587 
+            smtp_connection = smtplib.SMTP(smtp_server, smtp_port)
+            smtp_connection.starttls()
+            smtp_connection.login(sender_email, sender_password)
+            smtp_connection.sendmail(sender_email, recipient_email, message.as_string())
+            smtp_connection.quit()
             flash('Login successful!', 'success')
             session['user_id'] = user.id
             return redirect(url_for('dashboard'))
