@@ -609,22 +609,10 @@ def change_pass():
         return redirect(url_for('login'))
     
     user = User.query.filter_by(id=session['user_id']).first()
-    if 'user_id' not in session:
-        flash('You need to log in first.', 'danger')
-        return redirect(url_for('login'))
-    
-    user = User.query.filter_by(id=session['user_id']).first()
     if request.method == 'POST':
         prev_pass = request.form['prev_pass']
         new_pass = request.form['new_pass']
-        prev_pass = request.form['prev_pass']
-        new_pass = request.form['new_pass']
         password = request.form['password']
-        if user.password == prev_pass:
-            if new_pass == password:
-                user.password = generate_password_hash(password)
-                db.session.commit()
-                flash('Password changed successfully!', 'success')
         if user.password == prev_pass:
             if new_pass == password:
                 user.password = generate_password_hash(password)
@@ -739,63 +727,39 @@ def generate():
     current_user = User.query.filter_by(id=session['user_id']).first()
     return render_template('generate_notes.html', curr_user = current_user)
 
-@app.route("/send_updates")
+@app.route("/send_updates", methods=['GET', 'POST'])
 def send_update():
+    if 'user_id' not in session:
+        flash('You need to log in first.', 'danger')
+        return redirect(url_for('login'))
     
+    if request.method == 'POST':
     # recipient_emails = []
     
-    emails = User.query.with_entities(User.email).all()
-    for email in emails:
-        recipient_email = email[0]
-        # recipient_emails.append(email)
-    # print(recipient_emails)
+        emails = User.query.with_entities(User.email).all()
+        for email in emails:
+            recipient_email = email[0]
+            # recipient_emails.append(email)
+        # print(recipient_emails)
+            
         
-    
-        subject = "NotesWallah Update"
-        body = """
-        🚀  Upgrade Now at https://noteswallah.online :
-        > Embark on a transformative journey with NotesWallah 2.0! 🎉
-
-        🎨 Fresh New Look:
-        > Immerse yourself in a visually stunning, redesigned interface on every page. 🎨
-
-        > Prioritizing your study experience with user-friendly designs. 📘
-
-        🔐 Enhanced Security:
-        > Our commitment to keeping your data safe is stronger than ever! 🔒
-
-        🚀  Feature Galore:
-        > Explore a host of new features, from seamless file sharing to interactive study groups. 📚
-
-        > NotesWallah 2.0 has everything you need for collaborative learning! 🤝
-
-        💬 Interactive Comments:*
-        > Engage in meaningful discussions with our new commenting feature. 💬
-
-        > Share insights, ask questions, and connect directly with peers on any post. 🗣
-
-        🗂 Organize with Ease:
-        > Our revamped note sorting system makes finding what you need easier than ever. 🧭
-
-        > Stay organized effortlessly! 📁
-
-    🚀 Embark on a learning adventure like never before with NotesWallah 2.0!
-        """
-        message = MIMEMultipart()
-        message["From"] = sender_email
-        message["To"] = recipient_email
-        message["Subject"] = subject
-        message.attach(MIMEText(body, "plain"))
-
-        smtp_server = "smtp-relay.brevo.com"
-        smtp_port = 587 
-        smtp_connection = smtplib.SMTP(smtp_server, smtp_port)
-        smtp_connection.starttls()
-        smtp_connection.login(sender_email, sender_password)
-        smtp_connection.sendmail(sender_email, recipient_email, message.as_string())
-        smtp_connection.quit()
-        flash('Updates sent successfully!', 'success')
-    return redirect(url_for('dashboard'))
+            subject = request.form["subject"]
+            body = request.form["message"]
+            # recipient_email = "anath5440@gmail.com"
+            message = MIMEMultipart()
+            message["From"] = sender_email
+            message["To"] = recipient_email
+            message["Subject"] = subject
+            message.attach(MIMEText(body, "plain"))
+            smtp_server = "smtp-relay.brevo.com"
+            smtp_port = 587 
+            smtp_connection = smtplib.SMTP(smtp_server, smtp_port)
+            smtp_connection.starttls()
+            smtp_connection.login(sender_email, sender_password)
+            smtp_connection.sendmail(sender_email, recipient_email, message.as_string())
+            smtp_connection.quit()
+            flash('Updates sent successfully!', 'success')
+    return redirect(url_for('admin_panel'))
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=6011)

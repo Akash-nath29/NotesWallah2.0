@@ -367,6 +367,7 @@ nav ul li a svg {
     height: 85vh;
     overflow-y: scroll;
 }
+
 .result::-webkit-scrollbar {
     display: none;
 }
@@ -523,7 +524,6 @@ nav ul li a svg {
 .share-music-generate a:hover {
     text-decoration: underline;
 }
-
 #profile img {
     max-width: 350px;
 }
@@ -902,9 +902,16 @@ nav ul li a svg {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    justify-content: center;
+    justify-content: flex-start;
     /* margin: 0 20px; */
     margin-top: 2vh;
+    height: 80vh;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+}
+
+.comment-box ul::-webkit-scrollbar {
+    display: none;
 }
 
 .comment-box ul li {
@@ -967,6 +974,7 @@ nav ul li a svg {
 .tab-container {
     overflow-y: scroll;
 }
+
 .tab-container::-webkit-scrollbar {
     display: none;
 }
@@ -977,6 +985,7 @@ nav ul li a svg {
     margin: 10vh 0;
 
 }
+
 .generate-main::-webkit-scrollbar {
     display: none;
 
@@ -1163,6 +1172,7 @@ nav ul li a svg {
     .card-dashboard {
         margin: 2vh 0;
     }
+
     .body {
         display: flex;
         flex-direction: column;
@@ -1185,11 +1195,13 @@ nav ul li a svg {
     .generate-form input {
         width: 70%;
     }
+
     .generate-form button {
         margin: 0 1vh;
         background-color: transparent;
         transition: 0.4s;
     }
+
     .generate-form button:hover {
         background-color: #000;
         color: white;
@@ -1210,6 +1222,7 @@ nav ul li a svg {
         width: 300px;
         height: 200px;
     }
+
     #music {
         margin-top: 920px;
         width: auto;

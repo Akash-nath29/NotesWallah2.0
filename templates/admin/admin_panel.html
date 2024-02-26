@@ -102,7 +102,7 @@
             align-items: center;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
             border-radius: 10px;
-            /* padding: 5vh 0; */
+            padding: 5vh;
         }
 
         .right-pane h1 {
@@ -141,7 +141,6 @@
         .comments {
             display: none;
         }
-
         table {
             width: 50%;
             border-collapse: collapse;
@@ -172,13 +171,60 @@
             overflow-y: scroll;
             max-height: 90vh;
         }
-
+        
         .table {
             overflow: scroll;
             width: 90%;
             margin: 0 auto;
         }
-    </style>
+        .send-updates{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100vh;
+            margin: 2vh;
+        }
+        .send-updates form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 50%;
+            height: 50%;
+        }
+        .send-updates form input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            outline: none;
+            border-radius: 5px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+        .send-updates form button {
+            padding: 10px 20px;
+            margin: 10px 0;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            background-color: #fff;
+            color: #303030;
+            font-size: 1rem;
+            font-weight: 500;
+            border-radius: 5px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            transition: 0.4s;
+        }
+        .send-updates form button:hover {
+            background-color: #303030;
+            color: #fff;
+        }
+        .send-updates {
+            display: none;
+        }
+        </style>
 </head>
 
 <body>
@@ -194,6 +240,7 @@
             <li><button class="postBtn">Post</button></li>
             <li><button class="musicBtn">Music</button></li>
             <li><button class="commentBtn">Comment</button></li>
+            <li><button class="updatesBtn">Send Updates</button></li>
         </ul>
     </nav>
     <div class="container">
@@ -226,8 +273,8 @@
                     <li>No Music Available</li>
                     {% endif %}
                     {% if latest_comment %}
-                    <li>Comment: <a href="/view_post/{{latest_post.id}}">{{latest_post.file_name}}</a> by
-                        {{latest_post.author.username}}</li>
+                    <li>Comment: {{latest_comment.comment}}</a> by
+                        {{latest_comment.author.username}}</li>
                     {% else %}
                     <li>No Comment Available</li>
                     {% endif %}
@@ -363,6 +410,14 @@
                 </table>
             </div>
         </div>
+        <div class="send-updates">
+            <h1>Send Updates</h1>
+            <form action="{{url_for('send_update')}}" method="post">
+                <input type="text" name="subject" id="subject" placeholder="Subject">
+                <textarea name="message" id="message" cols="30" rows="10" placeholder="Message"></textarea>
+                <button type="submit">Send</button>
+            </form>
+        </div>
     </div>
     <footer>
     </footer>
@@ -372,17 +427,20 @@
             const post = document.querySelector('.postBtn');
             const music = document.querySelector('.musicBtn');
             const comment = document.querySelector('.commentBtn');
+            const updates = document.querySelector('.updatesBtn');
             const homePage = document.querySelector('.home');
             const userPage = document.querySelector('.user');
             const postPage = document.querySelector('.post');
             const musicPage = document.querySelector('.music');
             const commentPage = document.querySelector('.comments');
+            const updatesPage = document.querySelector('.send-updates');
             home.addEventListener('click', () => {
                 homePage.style.display = 'flex';
                 userPage.style.display = 'none';
                 postPage.style.display = 'none';
                 musicPage.style.display = 'none';
                 commentPage.style.display = 'none';
+                updatesPage.style.display = 'none';
             });
             user.addEventListener('click', () => {
                 homePage.style.display = 'none';
@@ -390,6 +448,7 @@
                 postPage.style.display = 'none';
                 musicPage.style.display = 'none';
                 commentPage.style.display = 'none';
+                updatesPage.style.display = 'none';
             });
             post.addEventListener('click', () => {
                 homePage.style.display = 'none';
@@ -397,6 +456,7 @@
                 postPage.style.display = 'flex';
                 musicPage.style.display = 'none';
                 commentPage.style.display = 'none';
+                updatesPage.style.display = 'none';
             });
             music.addEventListener('click', () => {
                 homePage.style.display = 'none';
@@ -404,13 +464,23 @@
                 postPage.style.display = 'none';
                 musicPage.style.display = 'flex';
                 commentPage.style.display = 'none';
+                updatesPage.style.display = 'none';
             });
             comment.addEventListener('click', () => {
                 homePage.style.display = 'none';
                 userPage.style.display = 'none';
                 postPage.style.display = 'none';
                 musicPage.style.display = 'none';
+                updatesPage.style.display = 'none';
                 commentPage.style.display = 'flex';
+            });
+            updates.addEventListener('click', () => {
+                homePage.style.display = 'none';
+                userPage.style.display = 'none';
+                postPage.style.display = 'none';
+                musicPage.style.display = 'none';
+                commentPage.style.display = 'none';
+                updatesPage.style.display = 'flex';
             });
         </script>
 </body>
