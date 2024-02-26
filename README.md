@@ -1,6 +1,7 @@
 <<<<<<< HEAD
 # NotesWallah2.0 - Class Notes and Study Music Sharing Platform 📚🎶
 <center><img src="https://github.com/Akash-nath29/NotesWallah/assets/100131577/b01c26c9-1219-4c47-8a23-44ca2c5329ff" width="150px"></center>
+
 [![GitHub stars](https://img.shields.io/github/stars/Akash-nath29/NotesWallah2.0.svg?style=flat-square)](https://github.com/Akash-nath29/NotesWallah/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/Akash-nath29/NotesWallah2.0.svg?style=flat-square)](https://github.com/Akash-nath29/NotesWallah/network)
 [![GitHub issues](https://img.shields.io/github/issues/Akash-nath29/NotesWallah2.0.svg?style=flat-square)](https://github.com/Akash-nath29/NotesWallah/issues)
