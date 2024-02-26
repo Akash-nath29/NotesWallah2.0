@@ -1,16 +1,6 @@
 <<<<<<< HEAD
 # NotesWallah2.0 - Class Notes and Study Music Sharing Platform 📚🎶
-
-=======
-<<<<<<< HEAD
-# NotesWallah2.0 - Class Notes and Study Music Sharing Platform 📚🎶
-=======
 <center><img src="https://github.com/Akash-nath29/NotesWallah/assets/100131577/b01c26c9-1219-4c47-8a23-44ca2c5329ff" width="150px"></center>
-
-# NotesWallah - Class Notes and Study Music Sharing Platform 📚🎶
->>>>>>> cb89d8ca93c1c8e05f15145a02dded4664d066c0
-
->>>>>>> 64599ca38315dc0612049031c2e0c704485fde6d
 [![GitHub stars](https://img.shields.io/github/stars/Akash-nath29/NotesWallah2.0.svg?style=flat-square)](https://github.com/Akash-nath29/NotesWallah/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/Akash-nath29/NotesWallah2.0.svg?style=flat-square)](https://github.com/Akash-nath29/NotesWallah/network)
 [![GitHub issues](https://img.shields.io/github/issues/Akash-nath29/NotesWallah2.0.svg?style=flat-square)](https://github.com/Akash-nath29/NotesWallah/issues)
@@ -20,20 +10,11 @@
 
 NotesWallah is a feature-rich Flask-based platform designed for sharing class notes and study music. It provides a seamless and secure environment for students to collaborate, learn, and enjoy music tailored to their study sessions.
 
-<<<<<<< HEAD
-![image](https://github.com/Akash-nath29/NotesWallah2.0/assets/100131577/b3350cb2-0f19-419d-8606-128cd05d7dc9)
-=======
-<<<<<<< HEAD
-![image](https://github.com/Akash-nath29/NotesWallah2.0/assets/100131577/b3350cb2-0f19-419d-8606-128cd05d7dc9)
-=======
-![image](https://github.com/Akash-nath29/NotesWallah/assets/100131577/e1ff2449-2003-4d97-9a99-93f198088aef)
 
-## Version:2.0.3
-- Redesigned Profile Section.
-- UI improvements.
+## Version: 3.0.0 🚀
+- Redesigned the whole UI.
+- User can comment on a post.
 - Bug fixes.
->>>>>>> cb89d8ca93c1c8e05f15145a02dded4664d066c0
->>>>>>> 64599ca38315dc0612049031c2e0c704485fde6d
 
 ## Key Features 🚀
 
