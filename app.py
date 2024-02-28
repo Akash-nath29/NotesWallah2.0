@@ -67,7 +67,6 @@ recipient_email = "devakash2905@gmail.com"
 
 db = SQLAlchemy(app)
 migrate = Migrate(app,db,render_as_batch=True)
-migrate = Migrate(app,db,render_as_batch=True)
 
 
 class User(db.Model):
@@ -364,9 +363,9 @@ def login():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
-        username = request.form['username']
-        email = request.form['email']
-        password = request.form['password']
+        username = request.form.get('username')
+        email = request.form.get('email')
+        password = request.form.get('password')
 
 
         # try:
@@ -613,12 +612,16 @@ def change_pass():
         prev_pass = request.form['prev_pass']
         new_pass = request.form['new_pass']
         password = request.form['password']
-        if user.password == prev_pass:
+        if check_password_hash(user.password, prev_pass):
             if new_pass == password:
                 user.password = generate_password_hash(password)
                 db.session.commit()
                 flash('Password changed successfully!', 'success')
+            else:
+                print("Error")
             return redirect(url_for('dashboard'))
+        else:
+            print("Error")
     return render_template('change_password.html', curr_user=user)
 
 # @app.route('/generate', methods=['GET', 'POST'])
