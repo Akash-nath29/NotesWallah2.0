@@ -303,8 +303,6 @@ def login():
 # #         )
 # #     )
 
-    return render_template('/auth/login.html')
-
 
 # @app.route('/login')
 # def login():
