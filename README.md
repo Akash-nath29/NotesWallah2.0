@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # NotesWallah2.0 - Class Notes and Study Music Sharing Platform 📚🎶
 <center><img src="https://github.com/Akash-nath29/NotesWallah/assets/100131577/b01c26c9-1219-4c47-8a23-44ca2c5329ff" width="150px"></center>
 
