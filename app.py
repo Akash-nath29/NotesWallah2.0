@@ -32,6 +32,8 @@ import markdown2
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+import requests
+from flask_jwt_extended import JWTManager, decode_token
 
 
 # ENV_FILE = find_dotenv()
@@ -46,10 +48,9 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///database.db"
 app.secret_key = secrets.token_hex(64)
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
+app.config['JWT_SECRET_KEY'] = secrets.token_hex(64)
 
-sender_email = "akashnath@noteswallah.online"
-sender_password = "xsmtpsib-1a634cc4b4076fe5ac43611c599c70002755120f67953a45bce9a35c5bc2e440-AqW3L8KzdgJEIC1y"
-recipient_email = "devakash2905@gmail.com"
+jwt = JWTManager(app)
 
 # oauth = OAuth(app)
 
@@ -221,28 +222,10 @@ def login():
         # except:
         #     flash('Enter Proper email and password', 'danger')
         #     return redirect(url_for('login'))
-
-
-
-        user = User.query.filter_by(email=email).first()
-        if user and check_password_hash(user.password, password):
-            subject = "Login in NotesWallah"
-            body = f"{user.username} Logged In NotesWallah. His/Her email is {email}."
-            message = MIMEMultipart()
-            message["From"] = sender_email
-            message["To"] = recipient_email
-            message["Subject"] = subject
-            message.attach(MIMEText(body, "plain"))
-
-            smtp_server = "smtp-relay.brevo.com"
-            smtp_port = 587 
-            smtp_connection = smtplib.SMTP(smtp_server, smtp_port)
-            smtp_connection.starttls()
-            smtp_connection.login(sender_email, sender_password)
-            smtp_connection.sendmail(sender_email, recipient_email, message.as_string())
-            smtp_connection.quit()
-            flash('Login successful!', 'success')
-            session['user_id'] = user.id
+        response = requests.post('http://127.0.0.1:80/login', json={'email': email, 'password': password})
+        session['user_id'] = response.json()['access_token']
+        print(response.json())
+        if response.status_code == 200:
             return redirect(url_for('dashboard'))
         else:
             flash('Login failed. Check your username and password.', 'danger')
@@ -382,22 +365,15 @@ def register():
         #     return redirect(url_for('register'))
 
 
-        existing_user = User.query.filter((User.username == username) | (User.email == email)).first()
-
-        if existing_user:
-            flash('Username or email already exists. Please choose a different one.', 'danger')
-        else:
-            hashed_password = generate_password_hash(password)
-
-            new_user = User(username=username, email=email, password=hashed_password)
-
-            db.session.add(new_user)
-            db.session.commit()
-
+        response = requests.post('http://127.0.0.1:80/register', json={'username': username, 'email': email, 'password': password})
+        print(response.json())
+        if response.status_code == 200:
             flash('Registration successful! You can now log in.', 'success')
             return redirect(url_for('login'))
+        else:
+            flash('Username or email already exists. Please choose a different one.', 'danger')
+            return redirect(url_for('register'))
 
-    return render_template('/auth/register.html')
     return render_template('/auth/register.html')
 
 @app.route('/logout')
@@ -416,30 +392,15 @@ def dashboard():
         flash('You need to log in first.', 'danger')
         return redirect(url_for('login'))
     
-    if 'user_id' not in session:
-        flash('You need to log in first.', 'danger')
-        return redirect(url_for('login'))
-    
-    posts = Post.query.order_by(desc(Post.id)).all()
-    musics = Music.query.order_by(desc(Music.id)).all()
-    post_details = []
-    music_details = []
-    for post in posts:
-        author = post.author
-        profile_picture = author.profile_picture
-        college = post.college
-        post_details.append({'post': post, 'author_profile_picture': profile_picture, 'college': college})
-        college = post.college
-        post_details.append({'post': post, 'author_profile_picture': profile_picture, 'college': college})
+    posts = requests.get('http://127.0.0.1:80/post/notes', headers={"Authorization":f"Bearer {session['user_id']}", "Content-Type": "application/json"}).json()["payload"]
+    print(posts)
+    print("\n")
+    musics = requests.get('http://127.0.0.1:80/post/music', headers={"Authorization":f"Bearer {session['user_id']}", "Content-Type": "application/json"}).json()["payload"]
+    print(musics)
 
-    for music in musics:
-        author = music.author
-        profile_picture = author.profile_picture
-        music_details.append({'music': music, 'author_profile_picture': profile_picture})
-
-    current_user = User.query.filter_by(id=session['user_id']).first()
+    current_user = User.query.filter_by(email=decode_token(session['user_id'])['identity']).first()
     
-    return render_template('dashboard.html', post_details=post_details, musiclist=music_details, curr_user=current_user)
+    return render_template('dashboard.html', post_details=posts, musiclist=musics, curr_user=current_user)
     
 if not os.path.exists(app.config['UPLOAD_FOLDER']):
     os.makedirs(app.config['UPLOAD_FOLDER'])
@@ -730,36 +691,36 @@ def generate():
 
 @app.route("/send_updates", methods=['GET', 'POST'])
 def send_update():
-    if 'user_id' not in session:
-        flash('You need to log in first.', 'danger')
-        return redirect(url_for('login'))
+    # if 'user_id' not in session:
+    #     flash('You need to log in first.', 'danger')
+    #     return redirect(url_for('login'))
     
-    if request.method == 'POST':
-    # recipient_emails = []
+    # if request.method == 'POST':
+    # # recipient_emails = []
     
-        emails = User.query.with_entities(User.email).all()
-        for email in emails:
-            recipient_email = email[0]
-            # recipient_emails.append(email)
-        # print(recipient_emails)
+    #     emails = User.query.with_entities(User.email).all()
+    #     for email in emails:
+    #         recipient_email = email[0]
+    #         # recipient_emails.append(email)
+    #     # print(recipient_emails)
             
         
-            subject = request.form["subject"]
-            body = request.form["message"]
-            # recipient_email = "anath5440@gmail.com"
-            message = MIMEMultipart()
-            message["From"] = sender_email
-            message["To"] = recipient_email
-            message["Subject"] = subject
-            message.attach(MIMEText(body, "plain"))
-            smtp_server = "smtp-relay.brevo.com"
-            smtp_port = 587 
-            smtp_connection = smtplib.SMTP(smtp_server, smtp_port)
-            smtp_connection.starttls()
-            smtp_connection.login(sender_email, sender_password)
-            smtp_connection.sendmail(sender_email, recipient_email, message.as_string())
-            smtp_connection.quit()
-            flash('Updates sent successfully!', 'success')
+    #         subject = request.form["subject"]
+    #         body = request.form["message"]
+    #         # recipient_email = "anath5440@gmail.com"
+    #         message = MIMEMultipart()
+    #         message["From"] = sender_email
+    #         message["To"] = recipient_email
+    #         message["Subject"] = subject
+    #         message.attach(MIMEText(body, "plain"))
+    #         smtp_server = "smtp-relay.brevo.com"
+    #         smtp_port = 587 
+    #         smtp_connection = smtplib.SMTP(smtp_server, smtp_port)
+    #         smtp_connection.starttls()
+    #         smtp_connection.login(sender_email, sender_password)
+    #         smtp_connection.sendmail(sender_email, recipient_email, message.as_string())
+    #         smtp_connection.quit()
+    #         flash('Updates sent successfully!', 'success')
     return redirect(url_for('admin_panel'))
 
 if __name__ == '__main__':
