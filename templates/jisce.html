@@ -10,18 +10,18 @@
     {% for note in jisce_notes %}
     {% if note %}
     <div class="card-dashboard">
-        <h3 class="card__title"><a href="{{ url_for('view_post', post_id=note.post.id) }}">{{note.post.file_name}}</a>
+        <h3 class="card__title"><a href="{{ url_for('view_post', post_id=note.id) }}">{{note.file_name}}</a>
         </h3>
-        <p class="card__content">{{note.post.file_description}}</p>
-        <p class="card__content">{{note.post.college}}</p>
+        <p class="card__content">{{note.file_description}}</p>
+        <p class="card__content">{{note.college}}</p>
         <div class="card__date">
             <span style="display: flex; align-items: center; margin: 10px 0;">
-                <img src="{{note.author_profile_picture}}" alt="author profile picture"
+                <img src="{{note.author.profile_picture}}" alt="author profile picture"
                     style="width:25px; height: 25px; aspect-ratio: 1/1; size: cover; border-radius: 50%; margin-right: 10px;">
-                <p style="font-size: 1rem;">{{note.post.author.username}}</p>
+                <p style="font-size: 1rem;">{{note.author.username}}</p>
             </span>
         </div>
-        <a href="{{ url_for('view_post', post_id=note.post.id) }}">
+        <a href="{{ url_for('view_post', post_id=note.id) }}">
             <div class="card__arrow">
 
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" height="15" width="15">

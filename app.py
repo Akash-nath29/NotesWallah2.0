@@ -213,15 +213,6 @@ def login():
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
-
-        # try:
-        #     auth.sign_in_with_email_and_password(email, password)
-        #     session['user_id'] = user.id  
-        #     flash('Login Successful', 'Success')
-        #     return redirect(url_for('dashboard'))
-        # except:
-        #     flash('Enter Proper email and password', 'danger')
-        #     return redirect(url_for('login'))
         response = requests.post('http://127.0.0.1:80/login', json={'email': email, 'password': password})
         session['user_id'] = response.json()['access_token']
         print(response.json())
@@ -398,9 +389,9 @@ def dashboard():
     musics = requests.get('http://127.0.0.1:80/post/music', headers={"Authorization":f"Bearer {session['user_id']}", "Content-Type": "application/json"}).json()["payload"]
     print(musics)
 
-    current_user = User.query.filter_by(email=decode_token(session['user_id'])['identity']).first()
+    # current_user = User.query.filter_by(email=decode_token(session['user_id'])['identity']).first()
     
-    return render_template('dashboard.html', post_details=posts, musiclist=musics, curr_user=current_user)
+    return render_template('dashboard.html', post_details=posts, musiclist=musics)#, curr_user=current_user)
     
 if not os.path.exists(app.config['UPLOAD_FOLDER']):
     os.makedirs(app.config['UPLOAD_FOLDER'])
@@ -460,9 +451,6 @@ def create_post():
 
 @app.route('/view_post/<int:post_id>')
 def view_post(post_id):
-    if 'user_id' not in session:
-        flash('You need to log in first.', 'danger')
-        return redirect(url_for('login'))
     
     if 'user_id' not in session:
         flash('You need to log in first.', 'danger')
@@ -516,9 +504,6 @@ def profile():
 
 @app.route('/author/<int:user_id>')
 def author_profile(user_id):
-    if 'user_id' not in session:
-        flash('You need to log in first.', 'danger')
-        return redirect(url_for('login'))
     
     if 'user_id' not in session:
         flash('You need to log in first.', 'danger')
@@ -611,15 +596,10 @@ def jisce():
         flash('You need to log in first.', 'danger')
         return redirect(url_for('login'))
     
-    jisce_notes = Post.query.filter_by(college='jisce').order_by(desc(Post.id)).all()
-    current_user = User.query.filter_by(id=session['user_id']).first()
-    post_details = []
-    for post in jisce_notes:
-        author = post.author
-        profile_picture = author.profile_picture
-        college = post.college
-        post_details.append({'post': post, 'author_profile_picture': profile_picture, 'college': college})
-    return render_template('jisce.html', jisce_notes=post_details, curr_user=current_user)
+    jisce_notes = requests.get("http://127.0.0.1:80/posts/notes/jisce", headers={"Authorization":f"Bearer {session['user_id']}", "Content-Type": "application/json"}).json()
+    current_user = requests.get("http://127.0.0.1:80/get_user/", headers={"Authorization": f"Bearer {session['user_id']}", "Content-Type": "application/json"}).json()
+    print(jisce_notes, current_user)
+    return render_template('jisce.html', jisce_notes=jisce_notes, curr_user=current_user)
 
 @app.route('/nit')
 def nit():
