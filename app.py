@@ -596,9 +596,10 @@ def jisce():
         flash('You need to log in first.', 'danger')
         return redirect(url_for('login'))
     
-    jisce_notes = requests.get("http://127.0.0.1:80/posts/notes/jisce", headers={"Authorization":f"Bearer {session['user_id']}", "Content-Type": "application/json"}).json()
-    current_user = requests.get("http://127.0.0.1:80/get_user/", headers={"Authorization": f"Bearer {session['user_id']}", "Content-Type": "application/json"}).json()
-    print(jisce_notes, current_user)
+    jisce_notes = requests.get("http://127.0.0.1:80/posts/notes/jisce", headers={"Authorization":f"Bearer {session['user_id']}", "Content-Type": "application/json"}).json()["payload"]
+    print(jisce_notes)
+    current_user = requests.get("http://127.0.0.1:80/get_user", headers={"Authorization": f"Bearer {session['user_id']}", "Content-Type": "application/json"}).json()["payload"]
+    print(current_user)
     return render_template('jisce.html', jisce_notes=jisce_notes, curr_user=current_user)
 
 @app.route('/nit')

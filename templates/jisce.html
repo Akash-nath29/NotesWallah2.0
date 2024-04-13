@@ -16,9 +16,7 @@
         <p class="card__content">{{note.college}}</p>
         <div class="card__date">
             <span style="display: flex; align-items: center; margin: 10px 0;">
-                <img src="{{note.author.profile_picture}}" alt="author profile picture"
-                    style="width:25px; height: 25px; aspect-ratio: 1/1; size: cover; border-radius: 50%; margin-right: 10px;">
-                <p style="font-size: 1rem;">{{note.author.username}}</p>
+                <!--  -->
             </span>
         </div>
         <a href="{{ url_for('view_post', post_id=note.id) }}">
