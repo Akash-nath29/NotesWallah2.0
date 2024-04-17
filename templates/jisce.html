@@ -16,7 +16,7 @@
         <p class="card__content">{{note.college}}</p>
         <div class="card__date">
             <span style="display: flex; align-items: center; margin: 10px 0;">
-                <!--  -->
+                <p>{{note.authorinfo.username}}</p>
             </span>
         </div>
         <a href="{{ url_for('view_post', post_id=note.id) }}">
