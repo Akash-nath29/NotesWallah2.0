@@ -7,8 +7,8 @@
     </div>
 </div>
 <div class="main jisce-main">
+    {% if jisce_notes %}
     {% for note in jisce_notes %}
-    {% if note %}
     <div class="card-dashboard">
         <h3 class="card__title"><a href="{{ url_for('view_post', post_id=note.id) }}">{{note.file_name}}</a>
         </h3>
@@ -16,6 +16,7 @@
         <p class="card__content">{{note.college}}</p>
         <div class="card__date">
             <span style="display: flex; align-items: center; margin: 10px 0;">
+                <img src="{{note.authorinfo.profile_picture}}" alt="author_profile_picture" width="20" height="20">
                 <p>{{note.authorinfo.username}}</p>
             </span>
         </div>
@@ -30,9 +31,9 @@
             </div>
         </a>
     </div>
+    {% endfor %}
     {% else %}
     <center><h1 style="font-size: 50px; color: #303030;">No Notes Available</h1></center>
     {% endif %}
-    {% endfor %}
 </div>
 {% endblock %}

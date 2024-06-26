@@ -9,23 +9,22 @@
         </b>
 
         <div class="share-notes-generate">
-            <h3>File Name: {{ post.file_name }}</h3>
-            <p>File Description: {{ post.file_description }}</p>
-            <p>College: {{ post.college }}</p>
-            <p>Uploaded By: {{ post.author.username }}</p>
-            <p>Uploaded On: {{ post.posted_at.strftime('%Y-%m-%d') }}</p>
+            <h3>File Name: {{ views.file_name }}</h3>
+            <p>File Description: {{ views.file_description }}</p>
+            <p>College: {{ views.college }}</p>
+            <p>Uploaded By: {{ views.authorinfo.username }}</p>
         </div>
     </div>
     <div class="main">
         <div class="comment-box">
             <h1>Comments</h1>
-            <form action="{{ url_for('add_comment', post_id=post.id) }}" method="post">
+            <form action="{{ url_for('add_comment', post_id=views.id) }}" method="post">
                 <input type="text" name="comment" id="comment" placeholder="Comment your thoughts..."
                     autocomplete="off">
                 <input type="submit" value="Add" />
             </form>
             <ul class="comment-list">
-                {% for comment in comments %}
+                {% for comment in views.comments %}
                 <li><strong>{{ comment.author.username }}</strong>: {{ comment.comment }} <i style="font-size: 10px;">{{
                         comment.commented_at }}</i></li>
                 {% endfor %}

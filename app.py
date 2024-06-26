@@ -456,15 +456,8 @@ def view_post(post_id):
         flash('You need to log in first.', 'danger')
         return redirect(url_for('login'))
     
-    post = Post.query.get(post_id)
-    file_path = post.file_path.replace("static/", "")
-    # print(file_path)
-    current_user = User.query.filter_by(id=session['user_id']).first()
-    comments = Comment.query.filter_by(post_id=post_id).order_by(desc(Comment.id)).all()
-    if post:
-        return render_template('view_post.html', post=post, file_path=file_path, curr_user=current_user, comments=comments)
-    else:
-        abort(404)
+    views = requests.get(f"http://127.0.0.1:80/view_post/{post_id}", headers={"Authorization": f"Bearer {session['user_id']}", "Content-Type": "application/json"}).json()["payload"]
+    return render_template('view_post.html', views=views)
 
 @app.route('/download_file/<int:post_id>')
 def download_file(post_id):
@@ -608,15 +601,11 @@ def nit():
         flash('You need to log in first.', 'danger')
         return redirect(url_for('login'))
     
-    nit_notes = Post.query.filter_by(college='nit').order_by(desc(Post.id)).all()
-    current_user = User.query.filter_by(id=session['user_id']).first()
-    post_details = []
-    for post in nit_notes:
-        author = post.author
-        profile_picture = author.profile_picture
-        college = post.college
-        post_details.append({'post': post, 'author_profile_picture': profile_picture, 'college': college})
-    return render_template('nit.html', nit_notes=post_details, curr_user=current_user)
+    nit_notes = requests.get("http://127.0.0.1:80/posts/notes/nit", headers={"Authorization":f"Bearer {session['user_id']}", "Content-Type": "application/json"}).json()["payload"]
+    print(nit_notes)
+    current_user = requests.get("http://127.0.0.1:80/get_user", headers={"Authorization": f"Bearer {session['user_id']}", "Content-Type": "application/json"}).json()["payload"]
+    print(current_user)
+    return render_template('nit.html', nit_notes=nit_notes, curr_user=current_user)
 
 @app.route('/jisu')
 def jisu():
@@ -644,11 +633,7 @@ def add_comment(post_id):
         comment = request.form['comment']
         user_id = session['user_id']
         commented_at = ist_now
-        new_comment = Comment(comment=comment, commented_at=commented_at, user_id=user_id, post_id=post_id)
-
-        db.session.add(new_comment)
-        db.session.commit()
-
+        requests.post("http://127.0.0.1:80/add_comment", json={"comment": comment, "user_id": user_id, "post_id": post_id}, headers={"Authorization":f"Bearer {session['user_id']}", "Content-Type": "application/json"})
         flash('Comment Added successfully!', 'success')
         return redirect(url_for('view_post', post_id=post_id))
 
